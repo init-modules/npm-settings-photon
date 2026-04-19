@@ -35,13 +35,16 @@ var normalizeWebsiteBuilderLocaleItems = (values, defaultLocale = "ru") => {
     )
   );
 };
-var parseWebsiteBuilderLocaleCodes = (value, fallback = ["ru", "en"]) => (value ?? "").split(",").map((item) => item.trim().toLowerCase()).filter(Boolean);
+var parseWebsiteBuilderLocaleCodes = (value, _fallback = ["ru", "en"]) => (value ?? "").split(",").map((item) => item.trim().toLowerCase()).filter(Boolean);
 var resolveWebsiteBuilderLocaleCodes = (value, fallback = ["ru", "en"]) => {
   const parsed = parseWebsiteBuilderLocaleCodes(value, fallback);
   return parsed.length > 0 ? parsed : fallback;
 };
-var resolveWebsiteBuilderActiveLocales = (locales) => locales.filter((locale) => locale.status === "active").sort((left, right) => (left.sortOrder ?? 0) - (right.sortOrder ?? 0));
-var resolveWebsiteBuilderEditableLocales = (locales) => locales.filter((locale) => locale.status === "active" || locale.status === "draft").sort((left, right) => (left.sortOrder ?? 0) - (right.sortOrder ?? 0));
+var bySortOrder = (left, right) => (left.sortOrder ?? 0) - (right.sortOrder ?? 0);
+var resolveWebsiteBuilderActiveLocales = (locales) => locales.filter((locale) => locale.status === "active").sort(bySortOrder);
+var resolveWebsiteBuilderEditableLocales = (locales) => locales.filter(
+  (locale) => locale.status === "active" || locale.status === "draft"
+).sort(bySortOrder);
 
 export {
   WEBSITE_BUILDER_LOCALE_STATUSES,

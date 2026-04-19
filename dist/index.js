@@ -6,7 +6,7 @@ import {
   resolveWebsiteBuilderActiveLocales,
   resolveWebsiteBuilderEditableLocales,
   resolveWebsiteBuilderLocaleCodes
-} from "./chunk-E757K4KE.js";
+} from "./chunk-R7IN3LYS.js";
 
 // src/module.tsx
 import {
@@ -182,10 +182,7 @@ var LocaleRowEditor = ({
               onClick: onToggleDefault,
               className: "inline-flex h-10 items-center rounded-full border px-3 text-xs font-semibold uppercase tracking-[0.22em] transition",
               style: accentButtonStyle,
-              children: locale.isDefault ? translate(
-                "settingsWebsiteBuilder.locales.default.label",
-                "Default"
-              ) : translate(
+              children: locale.isDefault ? translate("settingsWebsiteBuilder.locales.default.label", "Default") : translate(
                 "settingsWebsiteBuilder.locales.makeDefault.label",
                 "Make default"
               )
@@ -207,10 +204,7 @@ var LocaleRowEditor = ({
     }
   );
 };
-var LocalesSettingsPanel = ({
-  getValue,
-  setValue
-}) => {
+var LocalesSettingsPanel = ({ getValue, setValue }) => {
   const { translate } = useWebsiteBuilderI18n();
   const rawLocales = getValue("items");
   const locales = useMemo(
@@ -231,17 +225,10 @@ var LocalesSettingsPanel = ({
     setValue("items", nextValue);
   };
   return /* @__PURE__ */ jsxs("div", { className: "space-y-5", children: [
-    /* @__PURE__ */ jsx(
-      "div",
-      {
-        className: "rounded-2xl border px-4 py-3 text-sm leading-6",
-        style: infoCardStyle,
-        children: translate(
-          "settingsWebsiteBuilder.locales.description",
-          "Active locales are public. Draft locales are editable but hidden from the frontend. Inactive locales stay parked until they are re-enabled."
-        )
-      }
-    ),
+    /* @__PURE__ */ jsx("div", { className: "rounded-2xl border px-4 py-3 text-sm leading-6", style: infoCardStyle, children: translate(
+      "settingsWebsiteBuilder.locales.description",
+      "Active locales are public. Draft locales are editable but hidden from the frontend. Inactive locales stay parked until they are re-enabled."
+    ) }),
     /* @__PURE__ */ jsxs("div", { className: "flex flex-wrap items-center gap-2", children: [
       /* @__PURE__ */ jsx(
         "div",
@@ -362,5 +349,6 @@ export {
   resolveWebsiteBuilderEditableLocales,
   resolveWebsiteBuilderLocaleCodes,
   settingsWebsiteBuilderKit,
-  settingsWebsiteBuilderModule
+  settingsWebsiteBuilderModule,
+  siteLocalesSettingsPanel
 };
