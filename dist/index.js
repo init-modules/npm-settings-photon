@@ -12,7 +12,7 @@ import {
 import {
   createWebsiteBuilderKit,
   useWebsiteBuilderI18n
-} from "@init-modules/website-builder";
+} from "@init-modules/website-builder/public";
 import { useMemo } from "react";
 import { jsx, jsxs } from "react/jsx-runtime";
 var localeStatusOptions = [

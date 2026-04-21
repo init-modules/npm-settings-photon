@@ -1,7 +1,7 @@
 import type {
 	WebsiteBuilderLocaleDescriptor,
 	WebsiteBuilderLocaleStatus,
-} from "@init-modules/website-builder";
+} from "@init-modules/website-builder/public";
 
 export type WebsiteBuilderLocaleItem = WebsiteBuilderLocaleDescriptor;
 

@@ -9,7 +9,16 @@
 		"skipLibCheck": true,
 		"noEmit": true,
 		"esModuleInterop": true,
-		"resolveJsonModule": true
+		"resolveJsonModule": true,
+		"baseUrl": ".",
+		"paths": {
+			"@init-modules/website-builder": [
+				"../../website-builder-foundation/website-builder/src/index.ts"
+			],
+			"@init-modules/website-builder/public": [
+				"../../website-builder-foundation/website-builder/src/public.tsx"
+			]
+		}
 	},
 	"include": ["src/**/*"]
 }

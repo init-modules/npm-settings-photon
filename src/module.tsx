@@ -5,7 +5,7 @@ import {
 	type WebsiteBuilderLocaleStatus,
 	type WebsiteBuilderModule,
 	type WebsiteBuilderSiteSettingsPanelDefinition,
-} from "@init-modules/website-builder";
+} from "@init-modules/website-builder/public";
 import { useMemo } from "react";
 import {
 	normalizeWebsiteBuilderLocaleItems,

@@ -1,4 +1,4 @@
-import { WebsiteBuilderLocaleStatus, WebsiteBuilderLocaleDescriptor } from '@init-modules/website-builder';
+import { WebsiteBuilderLocaleStatus, WebsiteBuilderLocaleDescriptor } from '@init-modules/website-builder/public';
 
 type WebsiteBuilderLocaleItem = WebsiteBuilderLocaleDescriptor;
 declare const WEBSITE_BUILDER_LOCALE_STATUSES: WebsiteBuilderLocaleStatus[];
