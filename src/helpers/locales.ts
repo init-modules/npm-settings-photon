@@ -98,7 +98,5 @@ export const resolveWebsiteBuilderEditableLocales = (
 	locales: WebsiteBuilderLocaleItem[],
 ): WebsiteBuilderLocaleDescriptor[] =>
 	locales
-		.filter(
-			(locale) => locale.status === "active" || locale.status === "draft",
-		)
+		.filter((locale) => locale.status === "active" || locale.status === "draft")
 		.sort(bySortOrder);

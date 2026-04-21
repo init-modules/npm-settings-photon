@@ -145,7 +145,8 @@ const LocaleRowEditor = ({
 				<select
 					value={locale.status}
 					onChange={(event) => {
-						const status = event.currentTarget.value as WebsiteBuilderLocaleStatus;
+						const status = event.currentTarget
+							.value as WebsiteBuilderLocaleStatus;
 						onChange({
 							...locale,
 							status,
@@ -193,7 +194,10 @@ const LocaleRowEditor = ({
 					style={accentButtonStyle}
 				>
 					{locale.isDefault
-						? translate("settingsWebsiteBuilder.locales.default.label", "Default")
+						? translate(
+								"settingsWebsiteBuilder.locales.default.label",
+								"Default",
+							)
 						: translate(
 								"settingsWebsiteBuilder.locales.makeDefault.label",
 								"Make default",
@@ -243,7 +247,10 @@ const LocalesSettingsPanel: WebsiteBuilderSiteSettingsPanelDefinition["component
 
 		return (
 			<div className="space-y-5">
-				<div className="rounded-2xl border px-4 py-3 text-sm leading-6" style={infoCardStyle}>
+				<div
+					className="rounded-2xl border px-4 py-3 text-sm leading-6"
+					style={infoCardStyle}
+				>
 					{translate(
 						"settingsWebsiteBuilder.locales.description",
 						"Active locales are public. Draft locales are editable but hidden from the frontend. Inactive locales stay parked until they are re-enabled.",
@@ -285,7 +292,10 @@ const LocalesSettingsPanel: WebsiteBuilderSiteSettingsPanelDefinition["component
 						className="inline-flex h-10 items-center rounded-full border px-3 text-xs font-semibold uppercase tracking-[0.22em] transition"
 						style={accentButtonStyle}
 					>
-						{translate("settingsWebsiteBuilder.locales.add.label", "Add locale")}
+						{translate(
+							"settingsWebsiteBuilder.locales.add.label",
+							"Add locale",
+						)}
 					</button>
 				</div>
 				<div className="space-y-3">

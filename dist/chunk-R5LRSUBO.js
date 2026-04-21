@@ -42,9 +42,7 @@ var resolveWebsiteBuilderLocaleCodes = (value, fallback = ["ru", "en"]) => {
 };
 var bySortOrder = (left, right) => (left.sortOrder ?? 0) - (right.sortOrder ?? 0);
 var resolveWebsiteBuilderActiveLocales = (locales) => locales.filter((locale) => locale.status === "active").sort(bySortOrder);
-var resolveWebsiteBuilderEditableLocales = (locales) => locales.filter(
-  (locale) => locale.status === "active" || locale.status === "draft"
-).sort(bySortOrder);
+var resolveWebsiteBuilderEditableLocales = (locales) => locales.filter((locale) => locale.status === "active" || locale.status === "draft").sort(bySortOrder);
 
 export {
   WEBSITE_BUILDER_LOCALE_STATUSES,
