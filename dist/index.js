@@ -334,9 +334,9 @@ var LocalesSettingsPanel = ({ getValue, setValue }) => {
 var siteLocalesSettingsPanel = {
   key: "locales",
   label: "Locales",
-  labelKey: "settingsWebsiteBuilder.locales.label",
+  labelKey: "settingsWebsiteBuilder.locales.panel.label",
   description: "Global locale registry for the website builder and frontend runtime.",
-  descriptionKey: "settingsWebsiteBuilder.locales.description",
+  descriptionKey: "settingsWebsiteBuilder.locales.panel.description",
   order: 5,
   component: LocalesSettingsPanel
 };

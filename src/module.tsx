@@ -361,15 +361,15 @@ const LocalesSettingsPanel: WebsiteBuilderSiteSettingsPanelDefinition["component
 
 export const siteLocalesSettingsPanel: WebsiteBuilderSiteSettingsPanelDefinition =
 	{
-		key: "locales",
-		label: "Locales",
-		labelKey: "settingsWebsiteBuilder.locales.label",
-		description:
-			"Global locale registry for the website builder and frontend runtime.",
-		descriptionKey: "settingsWebsiteBuilder.locales.description",
-		order: 5,
-		component: LocalesSettingsPanel,
-	};
+	key: "locales",
+	label: "Locales",
+	labelKey: "settingsWebsiteBuilder.locales.panel.label",
+	description:
+		"Global locale registry for the website builder and frontend runtime.",
+	descriptionKey: "settingsWebsiteBuilder.locales.panel.description",
+	order: 5,
+	component: LocalesSettingsPanel,
+};
 
 export const settingsWebsiteBuilderModule: WebsiteBuilderModule = {
 	module: "settings-website-builder",
