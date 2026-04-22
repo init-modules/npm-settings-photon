@@ -1,12 +1,12 @@
-import { WebsiteBuilderLocaleStatus, WebsiteBuilderLocaleDescriptor } from '@init-modules/website-builder/public';
+import { PhotonLocaleStatus, PhotonLocaleDescriptor } from '@init/photon/public';
 
-type WebsiteBuilderLocaleItem = WebsiteBuilderLocaleDescriptor;
-declare const WEBSITE_BUILDER_LOCALE_STATUSES: WebsiteBuilderLocaleStatus[];
-declare const normalizeWebsiteBuilderLocaleItem: (value: Partial<WebsiteBuilderLocaleItem> | null | undefined, fallbackCode?: string, index?: number) => WebsiteBuilderLocaleItem;
-declare const normalizeWebsiteBuilderLocaleItems: (values: unknown, defaultLocale?: string) => WebsiteBuilderLocaleDescriptor[];
-declare const parseWebsiteBuilderLocaleCodes: (value: string | undefined, _fallback?: string[]) => string[];
-declare const resolveWebsiteBuilderLocaleCodes: (value: string | undefined, fallback?: string[]) => string[];
-declare const resolveWebsiteBuilderActiveLocales: (locales: WebsiteBuilderLocaleItem[]) => WebsiteBuilderLocaleDescriptor[];
-declare const resolveWebsiteBuilderEditableLocales: (locales: WebsiteBuilderLocaleItem[]) => WebsiteBuilderLocaleDescriptor[];
+type PhotonLocaleItem = PhotonLocaleDescriptor;
+declare const PHOTON_LOCALE_STATUSES: PhotonLocaleStatus[];
+declare const normalizePhotonLocaleItem: (value: Partial<PhotonLocaleItem> | null | undefined, fallbackCode?: string, index?: number) => PhotonLocaleItem;
+declare const normalizePhotonLocaleItems: (values: unknown, defaultLocale?: string) => PhotonLocaleDescriptor[];
+declare const parsePhotonLocaleCodes: (value: string | undefined, _fallback?: string[]) => string[];
+declare const resolvePhotonLocaleCodes: (value: string | undefined, fallback?: string[]) => string[];
+declare const resolvePhotonActiveLocales: (locales: PhotonLocaleItem[]) => PhotonLocaleDescriptor[];
+declare const resolvePhotonEditableLocales: (locales: PhotonLocaleItem[]) => PhotonLocaleDescriptor[];
 
-export { WEBSITE_BUILDER_LOCALE_STATUSES, type WebsiteBuilderLocaleItem, normalizeWebsiteBuilderLocaleItem, normalizeWebsiteBuilderLocaleItems, parseWebsiteBuilderLocaleCodes, resolveWebsiteBuilderActiveLocales, resolveWebsiteBuilderEditableLocales, resolveWebsiteBuilderLocaleCodes };
+export { PHOTON_LOCALE_STATUSES, type PhotonLocaleItem, normalizePhotonLocaleItem, normalizePhotonLocaleItems, parsePhotonLocaleCodes, resolvePhotonActiveLocales, resolvePhotonEditableLocales, resolvePhotonLocaleCodes };

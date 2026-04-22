@@ -1,21 +1,21 @@
 import type {
-	WebsiteBuilderLocaleDescriptor,
-	WebsiteBuilderLocaleStatus,
-} from "@init-modules/website-builder/public";
+	PhotonLocaleDescriptor,
+	PhotonLocaleStatus,
+} from "@init/photon/public";
 
-export type WebsiteBuilderLocaleItem = WebsiteBuilderLocaleDescriptor;
+export type PhotonLocaleItem = PhotonLocaleDescriptor;
 
-export const WEBSITE_BUILDER_LOCALE_STATUSES: WebsiteBuilderLocaleStatus[] = [
+export const PHOTON_LOCALE_STATUSES: PhotonLocaleStatus[] = [
 	"active",
 	"draft",
 	"inactive",
 ];
 
-export const normalizeWebsiteBuilderLocaleItem = (
-	value: Partial<WebsiteBuilderLocaleItem> | null | undefined,
+export const normalizePhotonLocaleItem = (
+	value: Partial<PhotonLocaleItem> | null | undefined,
 	fallbackCode = "ru",
 	index = 0,
-): WebsiteBuilderLocaleItem => {
+): PhotonLocaleItem => {
 	const code =
 		typeof value?.code === "string" && value.code.trim() !== ""
 			? value.code.trim().toLowerCase()
@@ -24,10 +24,10 @@ export const normalizeWebsiteBuilderLocaleItem = (
 		typeof value?.label === "string" && value.label.trim() !== ""
 			? value.label.trim()
 			: code.toUpperCase();
-	const status = WEBSITE_BUILDER_LOCALE_STATUSES.includes(
-		value?.status as WebsiteBuilderLocaleStatus,
+	const status = PHOTON_LOCALE_STATUSES.includes(
+		value?.status as PhotonLocaleStatus,
 	)
-		? (value?.status as WebsiteBuilderLocaleStatus)
+		? (value?.status as PhotonLocaleStatus)
 		: "active";
 
 	return {
@@ -42,13 +42,13 @@ export const normalizeWebsiteBuilderLocaleItem = (
 	};
 };
 
-export const normalizeWebsiteBuilderLocaleItems = (
+export const normalizePhotonLocaleItems = (
 	values: unknown,
 	defaultLocale = "ru",
-): WebsiteBuilderLocaleDescriptor[] => {
+): PhotonLocaleDescriptor[] => {
 	if (!Array.isArray(values)) {
 		return [
-			normalizeWebsiteBuilderLocaleItem({
+			normalizePhotonLocaleItem({
 				code: defaultLocale,
 				isDefault: true,
 			}),
@@ -56,9 +56,9 @@ export const normalizeWebsiteBuilderLocaleItems = (
 	}
 
 	return values.map((item, index) =>
-		normalizeWebsiteBuilderLocaleItem(
+		normalizePhotonLocaleItem(
 			typeof item === "object" && item !== null
-				? (item as Partial<WebsiteBuilderLocaleItem>)
+				? (item as Partial<PhotonLocaleItem>)
 				: null,
 			defaultLocale,
 			index,
@@ -66,7 +66,7 @@ export const normalizeWebsiteBuilderLocaleItems = (
 	);
 };
 
-export const parseWebsiteBuilderLocaleCodes = (
+export const parsePhotonLocaleCodes = (
 	value: string | undefined,
 	_fallback: string[] = ["ru", "en"],
 ): string[] =>
@@ -75,28 +75,28 @@ export const parseWebsiteBuilderLocaleCodes = (
 		.map((item) => item.trim().toLowerCase())
 		.filter(Boolean);
 
-export const resolveWebsiteBuilderLocaleCodes = (
+export const resolvePhotonLocaleCodes = (
 	value: string | undefined,
 	fallback: string[] = ["ru", "en"],
 ): string[] => {
-	const parsed = parseWebsiteBuilderLocaleCodes(value, fallback);
+	const parsed = parsePhotonLocaleCodes(value, fallback);
 
 	return parsed.length > 0 ? parsed : fallback;
 };
 
 const bySortOrder = (
-	left: WebsiteBuilderLocaleItem,
-	right: WebsiteBuilderLocaleItem,
+	left: PhotonLocaleItem,
+	right: PhotonLocaleItem,
 ): number => (left.sortOrder ?? 0) - (right.sortOrder ?? 0);
 
-export const resolveWebsiteBuilderActiveLocales = (
-	locales: WebsiteBuilderLocaleItem[],
-): WebsiteBuilderLocaleDescriptor[] =>
+export const resolvePhotonActiveLocales = (
+	locales: PhotonLocaleItem[],
+): PhotonLocaleDescriptor[] =>
 	locales.filter((locale) => locale.status === "active").sort(bySortOrder);
 
-export const resolveWebsiteBuilderEditableLocales = (
-	locales: WebsiteBuilderLocaleItem[],
-): WebsiteBuilderLocaleDescriptor[] =>
+export const resolvePhotonEditableLocales = (
+	locales: PhotonLocaleItem[],
+): PhotonLocaleDescriptor[] =>
 	locales
 		.filter((locale) => locale.status === "active" || locale.status === "draft")
 		.sort(bySortOrder);

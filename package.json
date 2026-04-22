@@ -1,7 +1,7 @@
 {
-	"name": "@init-modules/settings-website-builder",
+	"name": "@init/settings-photon",
 	"version": "0.1.0",
-	"description": "Locale settings bridge kit for the package-first website builder.",
+	"description": "Locale settings bridge kit for the package-first photon.",
 	"type": "module",
 	"files": [
 		"dist"
@@ -26,18 +26,18 @@
 		"prepack": "npm run build"
 	},
 	"peerDependencies": {
-		"@init-modules/website-builder": "^0.1.0",
+		"@init/photon": "^0.1.0",
 		"react": "^19.0.0",
 		"react-dom": "^19.0.0"
 	},
 	"devDependencies": {
-		"@init-modules/website-builder": "file:../../website-builder-foundation/website-builder",
+		"@init/photon": "file:../../photon-foundation/photon",
 		"@types/react": "^19.2.14",
 		"@types/react-dom": "^19.2.3",
 		"tsup": "^8.5.0",
 		"typescript": "^5.9.3"
 	},
-	"websiteBuilder": {
-		"installableKitExport": "settingsWebsiteBuilderKit"
+	"photon": {
+		"installableKitExport": "settingsPhotonKit"
 	}
 }

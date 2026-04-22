@@ -1,66 +1,66 @@
 import {
-  WEBSITE_BUILDER_LOCALE_STATUSES,
-  normalizeWebsiteBuilderLocaleItem,
-  normalizeWebsiteBuilderLocaleItems,
-  parseWebsiteBuilderLocaleCodes,
-  resolveWebsiteBuilderActiveLocales,
-  resolveWebsiteBuilderEditableLocales,
-  resolveWebsiteBuilderLocaleCodes
-} from "./chunk-R5LRSUBO.js";
+  PHOTON_LOCALE_STATUSES,
+  normalizePhotonLocaleItem,
+  normalizePhotonLocaleItems,
+  parsePhotonLocaleCodes,
+  resolvePhotonActiveLocales,
+  resolvePhotonEditableLocales,
+  resolvePhotonLocaleCodes
+} from "./chunk-DKZNIYZX.js";
 
 // src/module.tsx
 import {
-  createWebsiteBuilderKit,
-  useWebsiteBuilderI18n
-} from "@init-modules/website-builder/public";
+  createPhotonKit,
+  usePhotonI18n
+} from "@init/photon/public";
 import { useMemo } from "react";
 import { jsx, jsxs } from "react/jsx-runtime";
 var localeStatusOptions = [
   {
     label: "Active",
-    labelKey: "settingsWebsiteBuilder.locales.status.active.label",
+    labelKey: "settingsPhoton.locales.status.active.label",
     value: "active"
   },
   {
     label: "Draft",
-    labelKey: "settingsWebsiteBuilder.locales.status.draft.label",
+    labelKey: "settingsPhoton.locales.status.draft.label",
     value: "draft"
   },
   {
     label: "Inactive",
-    labelKey: "settingsWebsiteBuilder.locales.status.inactive.label",
+    labelKey: "settingsPhoton.locales.status.inactive.label",
     value: "inactive"
   }
 ];
 var infoCardStyle = {
-  borderColor: "var(--wb-builder-border)",
-  background: "linear-gradient(180deg, color-mix(in srgb, var(--wb-builder-accent) 10%, transparent), var(--wb-builder-panel-muted))",
-  color: "var(--wb-builder-text)"
+  borderColor: "var(--photon-builder-border)",
+  background: "linear-gradient(180deg, color-mix(in srgb, var(--photon-builder-accent) 10%, transparent), var(--photon-builder-panel-muted))",
+  color: "var(--photon-builder-text)"
 };
 var chipStyle = {
-  borderColor: "var(--wb-builder-border)",
-  background: "var(--wb-builder-panel-solid)",
-  color: "var(--wb-builder-text-soft)"
+  borderColor: "var(--photon-builder-border)",
+  background: "var(--photon-builder-panel-solid)",
+  color: "var(--photon-builder-text-soft)"
 };
 var rowStyle = {
-  borderColor: "var(--wb-builder-border)",
-  background: "var(--wb-builder-panel-muted)",
-  color: "var(--wb-builder-text)"
+  borderColor: "var(--photon-builder-border)",
+  background: "var(--photon-builder-panel-muted)",
+  color: "var(--photon-builder-text)"
 };
 var inputStyle = {
-  borderColor: "var(--wb-builder-border)",
-  background: "var(--wb-builder-field)",
-  color: "var(--wb-builder-text)"
+  borderColor: "var(--photon-builder-border)",
+  background: "var(--photon-builder-field)",
+  color: "var(--photon-builder-text)"
 };
 var accentButtonStyle = {
-  borderColor: "var(--wb-builder-border-strong)",
-  background: "var(--wb-builder-accent-soft)",
-  color: "var(--wb-builder-accent-text)"
+  borderColor: "var(--photon-builder-border-strong)",
+  background: "var(--photon-builder-accent-soft)",
+  color: "var(--photon-builder-accent-text)"
 };
 var neutralButtonStyle = {
-  borderColor: "var(--wb-builder-border)",
-  background: "var(--wb-builder-panel-solid)",
-  color: "var(--wb-builder-text)"
+  borderColor: "var(--photon-builder-border)",
+  background: "var(--photon-builder-panel-solid)",
+  color: "var(--photon-builder-text)"
 };
 var LocaleRowEditor = ({
   locale,
@@ -70,7 +70,7 @@ var LocaleRowEditor = ({
   onRemove,
   onToggleDefault
 }) => {
-  const { translate } = useWebsiteBuilderI18n();
+  const { translate } = usePhotonI18n();
   return /* @__PURE__ */ jsxs(
     "div",
     {
@@ -82,8 +82,8 @@ var LocaleRowEditor = ({
             "div",
             {
               className: "mb-2 text-[11px] uppercase tracking-[0.24em]",
-              style: { color: "var(--wb-builder-text-soft)" },
-              children: translate("settingsWebsiteBuilder.locales.code.label", "Code")
+              style: { color: "var(--photon-builder-text-soft)" },
+              children: translate("settingsPhoton.locales.code.label", "Code")
             }
           ),
           /* @__PURE__ */ jsx(
@@ -94,7 +94,7 @@ var LocaleRowEditor = ({
                 ...locale,
                 code: event.currentTarget.value
               }),
-              className: "w-full rounded-[1.1rem] border px-3 py-2.5 text-sm outline-none transition placeholder:text-[color:var(--wb-builder-text-ghost)]",
+              className: "w-full rounded-[1.1rem] border px-3 py-2.5 text-sm outline-none transition placeholder:text-[color:var(--photon-builder-text-ghost)]",
               style: inputStyle
             }
           )
@@ -104,8 +104,8 @@ var LocaleRowEditor = ({
             "div",
             {
               className: "mb-2 text-[11px] uppercase tracking-[0.24em]",
-              style: { color: "var(--wb-builder-text-soft)" },
-              children: translate("settingsWebsiteBuilder.locales.label.label", "Label")
+              style: { color: "var(--photon-builder-text-soft)" },
+              children: translate("settingsPhoton.locales.label.label", "Label")
             }
           ),
           /* @__PURE__ */ jsx(
@@ -116,7 +116,7 @@ var LocaleRowEditor = ({
                 ...locale,
                 label: event.currentTarget.value
               }),
-              className: "w-full rounded-[1.1rem] border px-3 py-2.5 text-sm outline-none transition placeholder:text-[color:var(--wb-builder-text-ghost)]",
+              className: "w-full rounded-[1.1rem] border px-3 py-2.5 text-sm outline-none transition placeholder:text-[color:var(--photon-builder-text-ghost)]",
               style: inputStyle
             }
           )
@@ -126,8 +126,8 @@ var LocaleRowEditor = ({
             "div",
             {
               className: "mb-2 text-[11px] uppercase tracking-[0.24em]",
-              style: { color: "var(--wb-builder-text-soft)" },
-              children: translate("settingsWebsiteBuilder.locales.status.label", "Status")
+              style: { color: "var(--photon-builder-text-soft)" },
+              children: translate("settingsPhoton.locales.status.label", "Status")
             }
           ),
           /* @__PURE__ */ jsx(
@@ -153,9 +153,9 @@ var LocaleRowEditor = ({
             "div",
             {
               className: "mb-2 text-[11px] uppercase tracking-[0.24em]",
-              style: { color: "var(--wb-builder-text-soft)" },
+              style: { color: "var(--photon-builder-text-soft)" },
               children: translate(
-                "settingsWebsiteBuilder.locales.sortOrder.label",
+                "settingsPhoton.locales.sortOrder.label",
                 "Sort order"
               )
             }
@@ -183,10 +183,10 @@ var LocaleRowEditor = ({
               className: "inline-flex h-10 items-center rounded-full border px-3 text-xs font-semibold uppercase tracking-[0.22em] transition",
               style: accentButtonStyle,
               children: locale.isDefault ? translate(
-                "settingsWebsiteBuilder.locales.default.label",
+                "settingsPhoton.locales.default.label",
                 "Default"
               ) : translate(
-                "settingsWebsiteBuilder.locales.makeDefault.label",
+                "settingsPhoton.locales.makeDefault.label",
                 "Make default"
               )
             }
@@ -199,7 +199,7 @@ var LocaleRowEditor = ({
               disabled: total <= 1,
               className: "inline-flex h-10 items-center rounded-full border px-3 text-xs font-semibold uppercase tracking-[0.22em] transition disabled:cursor-not-allowed disabled:opacity-50",
               style: neutralButtonStyle,
-              children: translate("settingsWebsiteBuilder.locales.remove.label", "Remove")
+              children: translate("settingsPhoton.locales.remove.label", "Remove")
             }
           )
         ] })
@@ -208,14 +208,14 @@ var LocaleRowEditor = ({
   );
 };
 var LocalesSettingsPanel = ({ getValue, setValue }) => {
-  const { translate } = useWebsiteBuilderI18n();
+  const { translate } = usePhotonI18n();
   const rawLocales = getValue("items");
   const locales = useMemo(
-    () => normalizeWebsiteBuilderLocaleItems(rawLocales),
+    () => normalizePhotonLocaleItems(rawLocales),
     [rawLocales]
   );
-  const activeLocales = resolveWebsiteBuilderActiveLocales(locales);
-  const editableLocales = resolveWebsiteBuilderEditableLocales(locales);
+  const activeLocales = resolvePhotonActiveLocales(locales);
+  const editableLocales = resolvePhotonEditableLocales(locales);
   const commit = (nextLocales) => {
     const normalized = nextLocales.map((locale, index) => ({
       ...locale,
@@ -234,7 +234,7 @@ var LocalesSettingsPanel = ({ getValue, setValue }) => {
         className: "rounded-2xl border px-4 py-3 text-sm leading-6",
         style: infoCardStyle,
         children: translate(
-          "settingsWebsiteBuilder.locales.description",
+          "settingsPhoton.locales.description",
           "Active locales are public. Draft locales are editable but hidden from the frontend. Inactive locales stay parked until they are re-enabled."
         )
       }
@@ -281,7 +281,7 @@ var LocalesSettingsPanel = ({ getValue, setValue }) => {
           className: "inline-flex h-10 items-center rounded-full border px-3 text-xs font-semibold uppercase tracking-[0.22em] transition",
           style: accentButtonStyle,
           children: translate(
-            "settingsWebsiteBuilder.locales.add.label",
+            "settingsPhoton.locales.add.label",
             "Add locale"
           )
         }
@@ -334,34 +334,34 @@ var LocalesSettingsPanel = ({ getValue, setValue }) => {
 var siteLocalesSettingsPanel = {
   key: "locales",
   label: "Locales",
-  labelKey: "settingsWebsiteBuilder.locales.panel.label",
-  description: "Global locale registry for the website builder and frontend runtime.",
-  descriptionKey: "settingsWebsiteBuilder.locales.panel.description",
+  labelKey: "settingsPhoton.locales.panel.label",
+  description: "Global locale registry for the photon and frontend runtime.",
+  descriptionKey: "settingsPhoton.locales.panel.description",
   order: 5,
   component: LocalesSettingsPanel
 };
-var settingsWebsiteBuilderModule = {
-  module: "settings-website-builder",
-  label: "Settings Website Builder",
-  labelKey: "settingsWebsiteBuilder.module.label",
+var settingsPhotonModule = {
+  module: "settings-photon",
+  label: "Settings Photon",
+  labelKey: "settingsPhoton.module.label",
   version: "0.1.0",
   blocks: [],
   siteSettingsPanels: [siteLocalesSettingsPanel]
 };
-var settingsWebsiteBuilderKit = createWebsiteBuilderKit({
-  key: "settings-website-builder",
-  label: "Settings Website Builder",
-  modules: [settingsWebsiteBuilderModule]
+var settingsPhotonKit = createPhotonKit({
+  key: "settings-photon",
+  label: "Settings Photon",
+  modules: [settingsPhotonModule]
 });
 export {
-  WEBSITE_BUILDER_LOCALE_STATUSES,
-  normalizeWebsiteBuilderLocaleItem,
-  normalizeWebsiteBuilderLocaleItems,
-  parseWebsiteBuilderLocaleCodes,
-  resolveWebsiteBuilderActiveLocales,
-  resolveWebsiteBuilderEditableLocales,
-  resolveWebsiteBuilderLocaleCodes,
-  settingsWebsiteBuilderKit,
-  settingsWebsiteBuilderModule,
+  PHOTON_LOCALE_STATUSES,
+  normalizePhotonLocaleItem,
+  normalizePhotonLocaleItems,
+  parsePhotonLocaleCodes,
+  resolvePhotonActiveLocales,
+  resolvePhotonEditableLocales,
+  resolvePhotonLocaleCodes,
+  settingsPhotonKit,
+  settingsPhotonModule,
   siteLocalesSettingsPanel
 };

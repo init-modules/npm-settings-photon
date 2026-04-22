@@ -1,83 +1,83 @@
 import {
-	createWebsiteBuilderKit,
-	useWebsiteBuilderI18n,
-	type WebsiteBuilderInstallableKit,
-	type WebsiteBuilderLocaleStatus,
-	type WebsiteBuilderModule,
-	type WebsiteBuilderSiteSettingsPanelDefinition,
-} from "@init-modules/website-builder/public";
+	createPhotonKit,
+	usePhotonI18n,
+	type PhotonInstallableKit,
+	type PhotonLocaleStatus,
+	type PhotonModule,
+	type PhotonSiteSettingsPanelDefinition,
+} from "@init/photon/public";
 import { useMemo } from "react";
 import {
-	normalizeWebsiteBuilderLocaleItems,
-	resolveWebsiteBuilderActiveLocales,
-	resolveWebsiteBuilderEditableLocales,
-	type WebsiteBuilderLocaleItem,
+	normalizePhotonLocaleItems,
+	resolvePhotonActiveLocales,
+	resolvePhotonEditableLocales,
+	type PhotonLocaleItem,
 } from "./helpers/locales";
 
 const localeStatusOptions: Array<{
 	label: string;
 	labelKey: string;
-	value: WebsiteBuilderLocaleStatus;
+	value: PhotonLocaleStatus;
 }> = [
 	{
 		label: "Active",
-		labelKey: "settingsWebsiteBuilder.locales.status.active.label",
+		labelKey: "settingsPhoton.locales.status.active.label",
 		value: "active",
 	},
 	{
 		label: "Draft",
-		labelKey: "settingsWebsiteBuilder.locales.status.draft.label",
+		labelKey: "settingsPhoton.locales.status.draft.label",
 		value: "draft",
 	},
 	{
 		label: "Inactive",
-		labelKey: "settingsWebsiteBuilder.locales.status.inactive.label",
+		labelKey: "settingsPhoton.locales.status.inactive.label",
 		value: "inactive",
 	},
 ];
 
 const infoCardStyle = {
-	borderColor: "var(--wb-builder-border)",
+	borderColor: "var(--photon-builder-border)",
 	background:
-		"linear-gradient(180deg, color-mix(in srgb, var(--wb-builder-accent) 10%, transparent), var(--wb-builder-panel-muted))",
-	color: "var(--wb-builder-text)",
+		"linear-gradient(180deg, color-mix(in srgb, var(--photon-builder-accent) 10%, transparent), var(--photon-builder-panel-muted))",
+	color: "var(--photon-builder-text)",
 };
 
 const chipStyle = {
-	borderColor: "var(--wb-builder-border)",
-	background: "var(--wb-builder-panel-solid)",
-	color: "var(--wb-builder-text-soft)",
+	borderColor: "var(--photon-builder-border)",
+	background: "var(--photon-builder-panel-solid)",
+	color: "var(--photon-builder-text-soft)",
 };
 
 const rowStyle = {
-	borderColor: "var(--wb-builder-border)",
-	background: "var(--wb-builder-panel-muted)",
-	color: "var(--wb-builder-text)",
+	borderColor: "var(--photon-builder-border)",
+	background: "var(--photon-builder-panel-muted)",
+	color: "var(--photon-builder-text)",
 };
 
 const inputStyle = {
-	borderColor: "var(--wb-builder-border)",
-	background: "var(--wb-builder-field)",
-	color: "var(--wb-builder-text)",
+	borderColor: "var(--photon-builder-border)",
+	background: "var(--photon-builder-field)",
+	color: "var(--photon-builder-text)",
 };
 
 const accentButtonStyle = {
-	borderColor: "var(--wb-builder-border-strong)",
-	background: "var(--wb-builder-accent-soft)",
-	color: "var(--wb-builder-accent-text)",
+	borderColor: "var(--photon-builder-border-strong)",
+	background: "var(--photon-builder-accent-soft)",
+	color: "var(--photon-builder-accent-text)",
 };
 
 const neutralButtonStyle = {
-	borderColor: "var(--wb-builder-border)",
-	background: "var(--wb-builder-panel-solid)",
-	color: "var(--wb-builder-text)",
+	borderColor: "var(--photon-builder-border)",
+	background: "var(--photon-builder-panel-solid)",
+	color: "var(--photon-builder-text)",
 };
 
 type LocaleRowEditorProps = {
-	locale: WebsiteBuilderLocaleItem;
+	locale: PhotonLocaleItem;
 	index: number;
 	total: number;
-	onChange: (locale: WebsiteBuilderLocaleItem) => void;
+	onChange: (locale: PhotonLocaleItem) => void;
 	onRemove: () => void;
 	onToggleDefault: () => void;
 };
@@ -90,7 +90,7 @@ const LocaleRowEditor = ({
 	onRemove,
 	onToggleDefault,
 }: LocaleRowEditorProps) => {
-	const { translate } = useWebsiteBuilderI18n();
+	const { translate } = usePhotonI18n();
 
 	return (
 		<div
@@ -100,9 +100,9 @@ const LocaleRowEditor = ({
 			<label className="block">
 				<div
 					className="mb-2 text-[11px] uppercase tracking-[0.24em]"
-					style={{ color: "var(--wb-builder-text-soft)" }}
+					style={{ color: "var(--photon-builder-text-soft)" }}
 				>
-					{translate("settingsWebsiteBuilder.locales.code.label", "Code")}
+					{translate("settingsPhoton.locales.code.label", "Code")}
 				</div>
 				<input
 					value={locale.code}
@@ -112,16 +112,16 @@ const LocaleRowEditor = ({
 							code: event.currentTarget.value,
 						})
 					}
-					className="w-full rounded-[1.1rem] border px-3 py-2.5 text-sm outline-none transition placeholder:text-[color:var(--wb-builder-text-ghost)]"
+					className="w-full rounded-[1.1rem] border px-3 py-2.5 text-sm outline-none transition placeholder:text-[color:var(--photon-builder-text-ghost)]"
 					style={inputStyle}
 				/>
 			</label>
 			<label className="block">
 				<div
 					className="mb-2 text-[11px] uppercase tracking-[0.24em]"
-					style={{ color: "var(--wb-builder-text-soft)" }}
+					style={{ color: "var(--photon-builder-text-soft)" }}
 				>
-					{translate("settingsWebsiteBuilder.locales.label.label", "Label")}
+					{translate("settingsPhoton.locales.label.label", "Label")}
 				</div>
 				<input
 					value={locale.label}
@@ -131,22 +131,22 @@ const LocaleRowEditor = ({
 							label: event.currentTarget.value,
 						})
 					}
-					className="w-full rounded-[1.1rem] border px-3 py-2.5 text-sm outline-none transition placeholder:text-[color:var(--wb-builder-text-ghost)]"
+					className="w-full rounded-[1.1rem] border px-3 py-2.5 text-sm outline-none transition placeholder:text-[color:var(--photon-builder-text-ghost)]"
 					style={inputStyle}
 				/>
 			</label>
 			<label className="block">
 				<div
 					className="mb-2 text-[11px] uppercase tracking-[0.24em]"
-					style={{ color: "var(--wb-builder-text-soft)" }}
+					style={{ color: "var(--photon-builder-text-soft)" }}
 				>
-					{translate("settingsWebsiteBuilder.locales.status.label", "Status")}
+					{translate("settingsPhoton.locales.status.label", "Status")}
 				</div>
 				<select
 					value={locale.status}
 					onChange={(event) => {
 						const status = event.currentTarget
-							.value as WebsiteBuilderLocaleStatus;
+							.value as PhotonLocaleStatus;
 						onChange({
 							...locale,
 							status,
@@ -166,10 +166,10 @@ const LocaleRowEditor = ({
 			<label className="block">
 				<div
 					className="mb-2 text-[11px] uppercase tracking-[0.24em]"
-					style={{ color: "var(--wb-builder-text-soft)" }}
+					style={{ color: "var(--photon-builder-text-soft)" }}
 				>
 					{translate(
-						"settingsWebsiteBuilder.locales.sortOrder.label",
+						"settingsPhoton.locales.sortOrder.label",
 						"Sort order",
 					)}
 				</div>
@@ -195,11 +195,11 @@ const LocaleRowEditor = ({
 				>
 					{locale.isDefault
 						? translate(
-								"settingsWebsiteBuilder.locales.default.label",
+								"settingsPhoton.locales.default.label",
 								"Default",
 							)
 						: translate(
-								"settingsWebsiteBuilder.locales.makeDefault.label",
+								"settingsPhoton.locales.makeDefault.label",
 								"Make default",
 							)}
 				</button>
@@ -210,24 +210,24 @@ const LocaleRowEditor = ({
 					className="inline-flex h-10 items-center rounded-full border px-3 text-xs font-semibold uppercase tracking-[0.22em] transition disabled:cursor-not-allowed disabled:opacity-50"
 					style={neutralButtonStyle}
 				>
-					{translate("settingsWebsiteBuilder.locales.remove.label", "Remove")}
+					{translate("settingsPhoton.locales.remove.label", "Remove")}
 				</button>
 			</div>
 		</div>
 	);
 };
 
-const LocalesSettingsPanel: WebsiteBuilderSiteSettingsPanelDefinition["component"] =
+const LocalesSettingsPanel: PhotonSiteSettingsPanelDefinition["component"] =
 	({ getValue, setValue }) => {
-		const { translate } = useWebsiteBuilderI18n();
+		const { translate } = usePhotonI18n();
 		const rawLocales = getValue("items");
 		const locales = useMemo(
-			() => normalizeWebsiteBuilderLocaleItems(rawLocales),
+			() => normalizePhotonLocaleItems(rawLocales),
 			[rawLocales],
 		);
-		const activeLocales = resolveWebsiteBuilderActiveLocales(locales);
-		const editableLocales = resolveWebsiteBuilderEditableLocales(locales);
-		const commit = (nextLocales: WebsiteBuilderLocaleItem[]) => {
+		const activeLocales = resolvePhotonActiveLocales(locales);
+		const editableLocales = resolvePhotonEditableLocales(locales);
+		const commit = (nextLocales: PhotonLocaleItem[]) => {
 			const normalized = nextLocales.map((locale, index) => ({
 				...locale,
 				sortOrder:
@@ -252,7 +252,7 @@ const LocalesSettingsPanel: WebsiteBuilderSiteSettingsPanelDefinition["component
 					style={infoCardStyle}
 				>
 					{translate(
-						"settingsWebsiteBuilder.locales.description",
+						"settingsPhoton.locales.description",
 						"Active locales are public. Draft locales are editable but hidden from the frontend. Inactive locales stay parked until they are re-enabled.",
 					)}
 				</div>
@@ -293,7 +293,7 @@ const LocalesSettingsPanel: WebsiteBuilderSiteSettingsPanelDefinition["component
 						style={accentButtonStyle}
 					>
 						{translate(
-							"settingsWebsiteBuilder.locales.add.label",
+							"settingsPhoton.locales.add.label",
 							"Add locale",
 						)}
 					</button>
@@ -359,30 +359,30 @@ const LocalesSettingsPanel: WebsiteBuilderSiteSettingsPanelDefinition["component
 		);
 	};
 
-export const siteLocalesSettingsPanel: WebsiteBuilderSiteSettingsPanelDefinition =
+export const siteLocalesSettingsPanel: PhotonSiteSettingsPanelDefinition =
 	{
 	key: "locales",
 	label: "Locales",
-	labelKey: "settingsWebsiteBuilder.locales.panel.label",
+	labelKey: "settingsPhoton.locales.panel.label",
 	description:
-		"Global locale registry for the website builder and frontend runtime.",
-	descriptionKey: "settingsWebsiteBuilder.locales.panel.description",
+		"Global locale registry for the photon and frontend runtime.",
+	descriptionKey: "settingsPhoton.locales.panel.description",
 	order: 5,
 	component: LocalesSettingsPanel,
 };
 
-export const settingsWebsiteBuilderModule: WebsiteBuilderModule = {
-	module: "settings-website-builder",
-	label: "Settings Website Builder",
-	labelKey: "settingsWebsiteBuilder.module.label",
+export const settingsPhotonModule: PhotonModule = {
+	module: "settings-photon",
+	label: "Settings Photon",
+	labelKey: "settingsPhoton.module.label",
 	version: "0.1.0",
 	blocks: [],
 	siteSettingsPanels: [siteLocalesSettingsPanel],
 };
 
-export const settingsWebsiteBuilderKit: WebsiteBuilderInstallableKit =
-	createWebsiteBuilderKit({
-		key: "settings-website-builder",
-		label: "Settings Website Builder",
-		modules: [settingsWebsiteBuilderModule],
+export const settingsPhotonKit: PhotonInstallableKit =
+	createPhotonKit({
+		key: "settings-photon",
+		label: "Settings Photon",
+		modules: [settingsPhotonModule],
 	});

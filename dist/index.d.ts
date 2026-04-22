@@ -1,8 +1,8 @@
-export { WEBSITE_BUILDER_LOCALE_STATUSES, WebsiteBuilderLocaleItem, normalizeWebsiteBuilderLocaleItem, normalizeWebsiteBuilderLocaleItems, parseWebsiteBuilderLocaleCodes, resolveWebsiteBuilderActiveLocales, resolveWebsiteBuilderEditableLocales, resolveWebsiteBuilderLocaleCodes } from './server.js';
-import { WebsiteBuilderInstallableKit, WebsiteBuilderModule, WebsiteBuilderSiteSettingsPanelDefinition } from '@init-modules/website-builder/public';
+export { PHOTON_LOCALE_STATUSES, PhotonLocaleItem, normalizePhotonLocaleItem, normalizePhotonLocaleItems, parsePhotonLocaleCodes, resolvePhotonActiveLocales, resolvePhotonEditableLocales, resolvePhotonLocaleCodes } from './server.js';
+import { PhotonInstallableKit, PhotonModule, PhotonSiteSettingsPanelDefinition } from '@init/photon/public';
 
-declare const siteLocalesSettingsPanel: WebsiteBuilderSiteSettingsPanelDefinition;
-declare const settingsWebsiteBuilderModule: WebsiteBuilderModule;
-declare const settingsWebsiteBuilderKit: WebsiteBuilderInstallableKit;
+declare const siteLocalesSettingsPanel: PhotonSiteSettingsPanelDefinition;
+declare const settingsPhotonModule: PhotonModule;
+declare const settingsPhotonKit: PhotonInstallableKit;
 
-export { settingsWebsiteBuilderKit, settingsWebsiteBuilderModule, siteLocalesSettingsPanel };
+export { settingsPhotonKit, settingsPhotonModule, siteLocalesSettingsPanel };

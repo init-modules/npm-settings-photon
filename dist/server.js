@@ -1,18 +1,18 @@
 import {
-  WEBSITE_BUILDER_LOCALE_STATUSES,
-  normalizeWebsiteBuilderLocaleItem,
-  normalizeWebsiteBuilderLocaleItems,
-  parseWebsiteBuilderLocaleCodes,
-  resolveWebsiteBuilderActiveLocales,
-  resolveWebsiteBuilderEditableLocales,
-  resolveWebsiteBuilderLocaleCodes
-} from "./chunk-R5LRSUBO.js";
+  PHOTON_LOCALE_STATUSES,
+  normalizePhotonLocaleItem,
+  normalizePhotonLocaleItems,
+  parsePhotonLocaleCodes,
+  resolvePhotonActiveLocales,
+  resolvePhotonEditableLocales,
+  resolvePhotonLocaleCodes
+} from "./chunk-DKZNIYZX.js";
 export {
-  WEBSITE_BUILDER_LOCALE_STATUSES,
-  normalizeWebsiteBuilderLocaleItem,
-  normalizeWebsiteBuilderLocaleItems,
-  parseWebsiteBuilderLocaleCodes,
-  resolveWebsiteBuilderActiveLocales,
-  resolveWebsiteBuilderEditableLocales,
-  resolveWebsiteBuilderLocaleCodes
+  PHOTON_LOCALE_STATUSES,
+  normalizePhotonLocaleItem,
+  normalizePhotonLocaleItems,
+  parsePhotonLocaleCodes,
+  resolvePhotonActiveLocales,
+  resolvePhotonEditableLocales,
+  resolvePhotonLocaleCodes
 };
