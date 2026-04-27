@@ -1,0 +1,7 @@
+{
+	"project_slug": "settings-photon",
+	"name": "@init/settings-photon",
+	"entry_type": "package",
+	"scope": "package:@init/settings-photon",
+	"package_name": "@init/settings-photon"
+}

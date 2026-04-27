@@ -11,6 +11,14 @@ export const PHOTON_LOCALE_STATUSES: PhotonLocaleStatus[] = [
 	"inactive",
 ];
 
+export const PHOTON_LOCALE_CODE_PATTERN = /^[a-z]{2}(_[a-z]{2,4})?$/;
+
+export const normalizePhotonLocaleCode = (code: string): string =>
+	code.trim().toLowerCase().replace(/-/g, "_");
+
+export const validatePhotonLocaleCode = (code: string): boolean =>
+	PHOTON_LOCALE_CODE_PATTERN.test(code);
+
 export const normalizePhotonLocaleItem = (
 	value: Partial<PhotonLocaleItem> | null | undefined,
 	fallbackCode = "ru",
@@ -18,7 +26,7 @@ export const normalizePhotonLocaleItem = (
 ): PhotonLocaleItem => {
 	const code =
 		typeof value?.code === "string" && value.code.trim() !== ""
-			? value.code.trim().toLowerCase()
+			? normalizePhotonLocaleCode(value.code)
 			: fallbackCode;
 	const label =
 		typeof value?.label === "string" && value.label.trim() !== ""
@@ -42,20 +50,70 @@ export const normalizePhotonLocaleItem = (
 	};
 };
 
-export const normalizePhotonLocaleItems = (
-	values: unknown,
-	defaultLocale = "ru",
+const enforceDefaultLocaleInvariants = (
+	items: PhotonLocaleDescriptor[],
+	fallbackCode: string,
 ): PhotonLocaleDescriptor[] => {
-	if (!Array.isArray(values)) {
+	if (items.length === 0) {
 		return [
 			normalizePhotonLocaleItem({
-				code: defaultLocale,
+				code: fallbackCode,
 				isDefault: true,
+				status: "active",
 			}),
 		];
 	}
 
-	return values.map((item, index) =>
+	const defaults = items.filter((item) => item.isDefault);
+	let defaultCode: string;
+
+	if (defaults.length === 0) {
+		defaultCode = items[0].code;
+	} else if (defaults.length > 1) {
+		defaultCode = defaults[0].code;
+	} else {
+		defaultCode = defaults[0].code;
+	}
+
+	return items.map((item) => {
+		const isDefault = item.code === defaultCode;
+		return {
+			...item,
+			isDefault,
+			status: isDefault ? "active" : item.status,
+		};
+	});
+};
+
+export const normalizePhotonLocaleItems = (
+	values: unknown,
+	defaultLocale = "ru",
+): PhotonLocaleDescriptor[] => {
+	if (typeof values === "string" && values.trim() !== "") {
+		return enforceDefaultLocaleInvariants(
+			[
+				normalizePhotonLocaleItem({
+					code: values,
+					isDefault: true,
+				}),
+			],
+			defaultLocale,
+		);
+	}
+
+	if (!Array.isArray(values)) {
+		return enforceDefaultLocaleInvariants(
+			[
+				normalizePhotonLocaleItem({
+					code: defaultLocale,
+					isDefault: true,
+				}),
+			],
+			defaultLocale,
+		);
+	}
+
+	const normalized = values.map((item, index) =>
 		normalizePhotonLocaleItem(
 			typeof item === "object" && item !== null
 				? (item as Partial<PhotonLocaleItem>)
@@ -64,6 +122,22 @@ export const normalizePhotonLocaleItems = (
 			index,
 		),
 	);
+
+	return enforceDefaultLocaleInvariants(normalized, defaultLocale);
+};
+
+export const canDeletePhotonLocale = (
+	locales: PhotonLocaleItem[],
+	code: string,
+): boolean => {
+	const target = locales.find((locale) => locale.code === code);
+	if (!target) {
+		return false;
+	}
+	if (target.isDefault) {
+		return false;
+	}
+	return true;
 };
 
 export const parsePhotonLocaleCodes = (

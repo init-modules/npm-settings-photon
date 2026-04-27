@@ -1,12 +1,19 @@
 import {
+	computePhotonTranslationCompletenessForLocales,
 	createPhotonKit,
 	usePhotonI18n,
+	usePhotonStore,
 	type PhotonInstallableKit,
 	type PhotonLocaleStatus,
 	type PhotonModule,
 	type PhotonSiteSettingsPanelDefinition,
-} from "@init/photon/public";
-import { useMemo } from "react";
+	type PhotonTranslationCompletenessResult,
+} from "@init/photon";
+import { useMemo, useState } from "react";
+import {
+	applyPhotonBulkPublish,
+	getPublishablePhotonLocales,
+} from "./helpers/bulk-publish-locales";
 import {
 	normalizePhotonLocaleItems,
 	resolvePhotonActiveLocales,
@@ -77,6 +84,7 @@ type LocaleRowEditorProps = {
 	locale: PhotonLocaleItem;
 	index: number;
 	total: number;
+	completeness?: PhotonTranslationCompletenessResult;
 	onChange: (locale: PhotonLocaleItem) => void;
 	onRemove: () => void;
 	onToggleDefault: () => void;
@@ -86,11 +94,29 @@ const LocaleRowEditor = ({
 	locale,
 	index,
 	total,
+	completeness,
 	onChange,
 	onRemove,
 	onToggleDefault,
 }: LocaleRowEditorProps) => {
 	const { translate } = usePhotonI18n();
+	const completenessTip = completeness
+		? `${completeness.filled}/${completeness.total} translatable fields filled`
+		: null;
+	const completenessTone =
+		completeness && completeness.total > 0
+			? completeness.percentage >= 95
+				? {
+						color: "var(--photon-builder-success, #16a34a)",
+					}
+				: completeness.percentage >= 70
+					? {
+							color: "var(--photon-builder-warning, #d97706)",
+						}
+					: {
+							color: "var(--photon-builder-danger, #dc2626)",
+						}
+			: null;
 
 	return (
 		<div
@@ -98,11 +124,22 @@ const LocaleRowEditor = ({
 			style={rowStyle}
 		>
 			<label className="block">
-				<div
-					className="mb-2 text-[11px] uppercase tracking-[0.24em]"
-					style={{ color: "var(--photon-builder-text-soft)" }}
-				>
-					{translate("settingsPhoton.locales.code.label", "Code")}
+				<div className="mb-2 flex items-center justify-between gap-2">
+					<span
+						className="text-[11px] uppercase tracking-[0.24em]"
+						style={{ color: "var(--photon-builder-text-soft)" }}
+					>
+						{translate("settingsPhoton.locales.code.label", "Code")}
+					</span>
+					{completeness && completeness.total > 0 ? (
+						<span
+							className="text-[10px] font-semibold tabular-nums"
+							title={completenessTip ?? undefined}
+							style={completenessTone ?? undefined}
+						>
+							{`${completeness.percentage}%`}
+						</span>
+					) : null}
 				</div>
 				<input
 					value={locale.code}
@@ -144,6 +181,15 @@ const LocaleRowEditor = ({
 				</div>
 				<select
 					value={locale.status}
+					disabled={locale.isDefault}
+					title={
+						locale.isDefault
+							? translate(
+									"settingsPhoton.locales.defaultMustBeActive.tooltip",
+									"Default locale must always be active. Promote another locale first.",
+								)
+							: undefined
+					}
 					onChange={(event) => {
 						const status = event.currentTarget
 							.value as PhotonLocaleStatus;
@@ -153,7 +199,7 @@ const LocaleRowEditor = ({
 							isDefault: status === "inactive" ? false : locale.isDefault,
 						});
 					}}
-					className="w-full rounded-[1.1rem] border px-3 py-2.5 text-sm outline-none transition"
+					className="w-full rounded-[1.1rem] border px-3 py-2.5 text-sm outline-none transition disabled:cursor-not-allowed disabled:opacity-50"
 					style={inputStyle}
 				>
 					{localeStatusOptions.map((option) => (
@@ -206,12 +252,183 @@ const LocaleRowEditor = ({
 				<button
 					type="button"
 					onClick={onRemove}
-					disabled={total <= 1}
+					disabled={total <= 1 || locale.isDefault}
+					title={
+						locale.isDefault
+							? translate(
+									"settingsPhoton.locales.cannotDeleteDefault.tooltip",
+									"Cannot delete default locale. Promote another locale to default first.",
+								)
+							: undefined
+					}
 					className="inline-flex h-10 items-center rounded-full border px-3 text-xs font-semibold uppercase tracking-[0.22em] transition disabled:cursor-not-allowed disabled:opacity-50"
 					style={neutralButtonStyle}
 				>
 					{translate("settingsPhoton.locales.remove.label", "Remove")}
 				</button>
+			</div>
+		</div>
+	);
+};
+
+type SettingsControlProps = {
+	getValue: Parameters<PhotonSiteSettingsPanelDefinition["component"]>[0]["getValue"];
+	setValue: Parameters<PhotonSiteSettingsPanelDefinition["component"]>[0]["setValue"];
+};
+
+const MissingTranslationIndicatorsControl = ({
+	getValue,
+	setValue,
+}: SettingsControlProps) => {
+	const { translate } = usePhotonI18n();
+	const disabled = Boolean(getValue("disableMissingTranslationIndicators"));
+
+	return (
+		<div
+			className="rounded-2xl border px-4 py-3 text-sm leading-6"
+			style={infoCardStyle}
+		>
+			<label className="flex items-start gap-3 cursor-pointer">
+				<input
+					type="checkbox"
+					checked={disabled}
+					onChange={(event) =>
+						setValue(
+							"disableMissingTranslationIndicators",
+							event.currentTarget.checked || null,
+						)
+					}
+					className="mt-0.5 h-4 w-4 cursor-pointer"
+				/>
+				<div className="flex-1">
+					<div
+						className="text-[11px] font-semibold uppercase tracking-[0.24em]"
+						style={{ color: "var(--photon-builder-text-soft)" }}
+					>
+						{translate(
+							"settingsPhoton.locales.missingIndicators.label",
+							"Hide missing-translation indicators",
+						)}
+					</div>
+					<div
+						className="mt-1 text-sm"
+						style={{ color: "var(--photon-builder-text-soft)" }}
+					>
+						{translate(
+							"settingsPhoton.locales.missingIndicators.description",
+							"Suppresses the inline warn icon shown next to translatable fields that are empty (or copied untranslated) in any locale. Translatability metadata and the per-locale percentage in the switcher are not affected.",
+						)}
+					</div>
+				</div>
+			</label>
+		</div>
+	);
+};
+
+type FallbackLocaleControlProps = {
+	locales: PhotonLocaleItem[];
+	getValue: Parameters<PhotonSiteSettingsPanelDefinition["component"]>[0]["getValue"];
+	setValue: Parameters<PhotonSiteSettingsPanelDefinition["component"]>[0]["setValue"];
+};
+
+const FallbackLocaleControl = ({
+	locales,
+	getValue,
+	setValue,
+}: FallbackLocaleControlProps) => {
+	const { translate } = usePhotonI18n();
+	const raw = getValue("fallbackLocale");
+	const fallbackDisabled = raw === false;
+	const explicitCode = typeof raw === "string" ? raw : "";
+	const defaultLocale = locales.find((locale) => locale.isDefault);
+	const effectiveCode = fallbackDisabled
+		? null
+		: explicitCode && locales.some((locale) => locale.code === explicitCode)
+			? explicitCode
+			: defaultLocale?.code ?? null;
+
+	return (
+		<div
+			className="rounded-2xl border px-4 py-3 text-sm leading-6"
+			style={infoCardStyle}
+		>
+			<div
+				className="mb-2 text-[11px] uppercase tracking-[0.24em]"
+				style={{ color: "var(--photon-builder-text-soft)" }}
+			>
+				{translate(
+					"settingsPhoton.locales.fallback.label",
+					"Field-level fallback locale",
+				)}
+			</div>
+			<div
+				className="mb-3 text-sm"
+				style={{ color: "var(--photon-builder-text-soft)" }}
+			>
+				{translate(
+					"settingsPhoton.locales.fallback.description",
+					"When a field is empty in the current locale, the public site renders the value from this locale instead. Disable to leave empty fields visibly empty.",
+				)}
+			</div>
+			<div className="flex flex-wrap items-center gap-3">
+				<label className="inline-flex items-center gap-2">
+					<input
+						type="checkbox"
+						checked={!fallbackDisabled}
+						onChange={(event) => {
+							if (!event.currentTarget.checked) {
+								setValue("fallbackLocale", false);
+							} else {
+								setValue("fallbackLocale", null);
+							}
+						}}
+						className="h-4 w-4 cursor-pointer"
+					/>
+					<span className="text-sm">
+						{translate(
+							"settingsPhoton.locales.fallback.enabled.label",
+							"Enable fallback",
+						)}
+					</span>
+				</label>
+				<select
+					value={explicitCode}
+					disabled={fallbackDisabled}
+					onChange={(event) => {
+						const next = event.currentTarget.value;
+						setValue("fallbackLocale", next === "" ? null : next);
+					}}
+					className="rounded-[1.1rem] border px-3 py-2 text-sm outline-none transition disabled:cursor-not-allowed disabled:opacity-50"
+					style={inputStyle}
+				>
+					<option value="">
+						{translate(
+							"settingsPhoton.locales.fallback.useDefault.label",
+							`Use default (${defaultLocale?.label ?? defaultLocale?.code ?? "—"})`,
+						)}
+					</option>
+					{locales
+						.filter((locale) => !locale.isDefault)
+						.map((locale) => (
+							<option key={locale.code} value={locale.code}>
+								{locale.label}
+							</option>
+						))}
+				</select>
+				<span
+					className="text-[10px] uppercase tracking-[0.22em]"
+					style={{ color: "var(--photon-builder-text-ghost)" }}
+				>
+					{fallbackDisabled
+						? translate(
+								"settingsPhoton.locales.fallback.disabled.summary",
+								"Disabled · empty fields stay empty",
+							)
+						: translate(
+								"settingsPhoton.locales.fallback.summary",
+								`Fallback target: ${effectiveCode?.toUpperCase() ?? "—"}`,
+							)}
+				</span>
 			</div>
 		</div>
 	);
@@ -227,6 +444,31 @@ const LocalesSettingsPanel: PhotonSiteSettingsPanelDefinition["component"] =
 		);
 		const activeLocales = resolvePhotonActiveLocales(locales);
 		const editableLocales = resolvePhotonEditableLocales(locales);
+		const publishableLocales = useMemo(
+			() => getPublishablePhotonLocales(locales),
+			[locales],
+		);
+		const documentBlocks = usePhotonStore((state) => state.document.blocks);
+		const registry = usePhotonStore((state) => state.registry);
+		const defaultLocaleCode = locales.find((l) => l.isDefault)?.code;
+		const editableLocaleCodes = useMemo(
+			() => editableLocales.map((l) => l.code),
+			[editableLocales],
+		);
+		const completeness = useMemo(
+			() =>
+				computePhotonTranslationCompletenessForLocales({
+					blocks: documentBlocks,
+					registry,
+					locales: editableLocaleCodes,
+					...(defaultLocaleCode ? { referenceLocale: defaultLocaleCode } : {}),
+				}),
+			[documentBlocks, registry, editableLocaleCodes, defaultLocaleCode],
+		);
+		const [bulkPublishOpen, setBulkPublishOpen] = useState(false);
+		const [bulkPublishSelection, setBulkPublishSelection] = useState<
+			Set<string>
+		>(() => new Set());
 		const commit = (nextLocales: PhotonLocaleItem[]) => {
 			const normalized = nextLocales.map((locale, index) => ({
 				...locale,
@@ -243,6 +485,32 @@ const LocalesSettingsPanel: PhotonSiteSettingsPanelDefinition["component"] =
 					);
 
 			setValue("items", nextValue);
+		};
+
+		const openBulkPublish = () => {
+			setBulkPublishSelection(
+				new Set(publishableLocales.map((locale) => locale.code)),
+			);
+			setBulkPublishOpen(true);
+		};
+		const closeBulkPublish = () => setBulkPublishOpen(false);
+		const toggleBulkPublishCode = (code: string) => {
+			setBulkPublishSelection((prev) => {
+				const next = new Set(prev);
+				if (next.has(code)) next.delete(code);
+				else next.add(code);
+				return next;
+			});
+		};
+		const confirmBulkPublish = () => {
+			const codes = Array.from(bulkPublishSelection);
+			if (codes.length === 0) {
+				closeBulkPublish();
+				return;
+			}
+			const { nextLocales } = applyPhotonBulkPublish(locales, codes);
+			commit(nextLocales);
+			closeBulkPublish();
 		};
 
 		return (
@@ -297,7 +565,36 @@ const LocalesSettingsPanel: PhotonSiteSettingsPanelDefinition["component"] =
 							"Add locale",
 						)}
 					</button>
+					<button
+						type="button"
+						onClick={openBulkPublish}
+						disabled={publishableLocales.length === 0}
+						title={
+							publishableLocales.length === 0
+								? translate(
+										"settingsPhoton.locales.bulkPublish.empty.tooltip",
+										"No draft locales to publish.",
+									)
+								: undefined
+						}
+						className="inline-flex h-10 items-center rounded-full border px-3 text-xs font-semibold uppercase tracking-[0.22em] transition disabled:cursor-not-allowed disabled:opacity-50"
+						style={neutralButtonStyle}
+					>
+						{translate(
+							"settingsPhoton.locales.bulkPublish.label",
+							`Publish drafts (${publishableLocales.length})`,
+						)}
+					</button>
 				</div>
+				<FallbackLocaleControl
+					locales={locales}
+					getValue={getValue}
+					setValue={setValue}
+				/>
+				<MissingTranslationIndicatorsControl
+					getValue={getValue}
+					setValue={setValue}
+				/>
 				<div className="space-y-3">
 					{locales.map((locale, index) => (
 						<LocaleRowEditor
@@ -305,6 +602,7 @@ const LocalesSettingsPanel: PhotonSiteSettingsPanelDefinition["component"] =
 							locale={locale}
 							index={index}
 							total={locales.length}
+							completeness={completeness[locale.code]}
 							onChange={(nextLocale) => {
 								const nextLocales = [...locales];
 								nextLocales[index] = nextLocale;
@@ -355,9 +653,124 @@ const LocalesSettingsPanel: PhotonSiteSettingsPanelDefinition["component"] =
 						/>
 					))}
 				</div>
+				{bulkPublishOpen ? (
+					<BulkPublishModal
+						publishableLocales={publishableLocales}
+						selection={bulkPublishSelection}
+						onToggle={toggleBulkPublishCode}
+						onCancel={closeBulkPublish}
+						onConfirm={confirmBulkPublish}
+					/>
+				) : null}
 			</div>
 		);
 	};
+
+type BulkPublishModalProps = {
+	publishableLocales: ReturnType<typeof getPublishablePhotonLocales>;
+	selection: Set<string>;
+	onToggle: (code: string) => void;
+	onCancel: () => void;
+	onConfirm: () => void;
+};
+
+const BulkPublishModal = ({
+	publishableLocales,
+	selection,
+	onToggle,
+	onCancel,
+	onConfirm,
+}: BulkPublishModalProps) => {
+	const { translate } = usePhotonI18n();
+	const selectedCount = selection.size;
+
+	return (
+		<div
+			role="dialog"
+			aria-modal="true"
+			className="fixed inset-0 z-[1000] flex items-center justify-center p-4"
+			style={{ background: "color-mix(in srgb, black 50%, transparent)" }}
+			onClick={(event) => {
+				if (event.target === event.currentTarget) onCancel();
+			}}
+		>
+			<div
+				className="w-full max-w-md rounded-3xl border p-5 shadow-2xl"
+				style={rowStyle}
+			>
+				<div
+					className="mb-2 text-base font-semibold"
+					style={{ color: "var(--photon-builder-text)" }}
+				>
+					{translate(
+						"settingsPhoton.locales.bulkPublish.title",
+						"Publish draft locales",
+					)}
+				</div>
+				<div
+					className="mb-4 text-sm leading-6"
+					style={{ color: "var(--photon-builder-text-soft)" }}
+				>
+					{translate(
+						"settingsPhoton.locales.bulkPublish.description",
+						"The selected locales will be flipped from draft to active and become visible on the public site. Uncheck any you don't want to publish yet.",
+					)}
+				</div>
+				<div className="mb-4 max-h-[40vh] space-y-2 overflow-y-auto">
+					{publishableLocales.map((locale) => {
+						const checked = selection.has(locale.code);
+						return (
+							<label
+								key={locale.code}
+								className="flex cursor-pointer items-center gap-3 rounded-xl border px-3 py-2 text-sm transition"
+								style={inputStyle}
+							>
+								<input
+									type="checkbox"
+									checked={checked}
+									onChange={() => onToggle(locale.code)}
+									className="h-4 w-4 cursor-pointer"
+								/>
+								<span className="font-medium">{locale.label}</span>
+								<span
+									className="ml-auto text-[10px] uppercase tracking-[0.24em]"
+									style={{ color: "var(--photon-builder-text-ghost)" }}
+								>
+									{locale.code}
+								</span>
+							</label>
+						);
+					})}
+				</div>
+				<div className="flex items-center justify-end gap-2">
+					<button
+						type="button"
+						onClick={onCancel}
+						className="inline-flex h-10 items-center rounded-full border px-4 text-xs font-semibold uppercase tracking-[0.22em] transition"
+						style={neutralButtonStyle}
+					>
+						{translate(
+							"settingsPhoton.locales.bulkPublish.cancel",
+							"Cancel",
+						)}
+					</button>
+					<button
+						type="button"
+						onClick={onConfirm}
+						disabled={selectedCount === 0}
+						className="inline-flex h-10 items-center rounded-full border px-4 text-xs font-semibold uppercase tracking-[0.22em] transition disabled:cursor-not-allowed disabled:opacity-50"
+						style={accentButtonStyle}
+					>
+						{translate(
+							"settingsPhoton.locales.bulkPublish.confirm",
+							`Publish ${selectedCount}`,
+						)}
+					</button>
+				</div>
+			</div>
+		</div>
+	);
+};
 
 export const siteLocalesSettingsPanel: PhotonSiteSettingsPanelDefinition =
 	{
